@@ -29,6 +29,10 @@ function TicketMachine() {
         if(typeof ticketNumber === "number") skips.push(ticketNumber);
         else ticketNumber = nextTicket++;
 
+        // Skip over the skipQueue
+        while(skipQueue.includes(ticketNumber)) ticketNumber++;
+        skipQueue = skipQueue.filter(t => t > ticketNumber);
+
         if(ticketNumber >= currentTicket) return false;
 
         // Skip over the skips
