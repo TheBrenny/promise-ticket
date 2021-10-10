@@ -5,6 +5,7 @@ function TicketMachine() {
     let nextTicket = 0;
     let currentTicket = 0;
     let skips = [];
+    let skipQueue = [];
 
     const promFn = (resolve) => {
         let num = currentTicket++;
@@ -16,8 +17,10 @@ function TicketMachine() {
 
     // Someone takes a ticket from the machine
     this.queue = (resolveValue) => {
+        let ticketNumber = currentTicket;
         let p = generator.next().value;
         if(resolveValue !== undefined) p = p.then(() => resolveValue);
+        if(skipQueue.includes(ticketNumber)) emitter.emit(ticketNumber);
         return p;
     };
     this.take = this.queue;
@@ -32,8 +35,15 @@ function TicketMachine() {
         while(skips.includes(nextTicket)) nextTicket++;
         skips = skips.filter(s => s > nextTicket);
 
-        emitter.emit(ticketNumber);
-        return true;
+        let didEmit = emitter.emit(ticketNumber);
+        return didEmit;
+    };
+    this.skipQueue = (ticketNumber) => {
+        ticketNumber = typeof ticketNumber === "number" ? ticketNumber : currentTicket;
+        let didEmit = emitter.emit(ticketNumber);
+        if(!didEmit) skipQueue.push(ticketNumber);
+        skips.push(ticketNumber);
+        return this;
     };
 
     // Remove everyone from the line by processing their tickets
