@@ -71,7 +71,7 @@ setTimeout(() => {
             let e = expected[i];
             if(typeof o === "object") o = JSON.stringify(o);
             if(typeof e === "object") e = JSON.stringify(e);
-            if(o !== e) mismatch.push([v, e]);
+            if(o !== e) mismatch.push([i, v, e]);
             return o === e;
         });
         return every && outs.length === expected.length;

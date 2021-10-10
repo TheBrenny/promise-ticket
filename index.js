@@ -5,7 +5,6 @@ function TicketMachine() {
     let nextTicket = 0;
     let currentTicket = 0;
     let skips = [];
-    let skipQueue = [];
 
     const promFn = (resolve) => {
         let num = currentTicket++;
@@ -20,32 +19,35 @@ function TicketMachine() {
         let ticketNumber = currentTicket;
         let p = generator.next().value;
         if(resolveValue !== undefined) p = p.then(() => resolveValue);
-        if(skipQueue.includes(ticketNumber)) emitter.emit(ticketNumber);
+        if(skips.includes(ticketNumber)) emitter.emit(ticketNumber);
         return p;
     };
     this.take = this.queue;
+
     // We shout "NEXT" for the next ticket in line
     this.next = (ticketNumber) => {
         if(typeof ticketNumber === "number") skips.push(ticketNumber);
-        else ticketNumber = nextTicket++;
+        else {
+            ticketNumber = nextTicket++;
+            // Skip over the skips
+            while(skips.includes(ticketNumber)) {
+                ticketNumber++;
+                nextTicket++;
+            }
+            skips = skips.filter(s => s > ticketNumber);
 
-        // Skip over the skipQueue
-        while(skipQueue.includes(ticketNumber)) ticketNumber++;
-        skipQueue = skipQueue.filter(t => t > ticketNumber);
-
-        if(ticketNumber >= currentTicket) return false;
-
-        // Skip over the skips
-        while(skips.includes(nextTicket)) nextTicket++;
-        skips = skips.filter(s => s > nextTicket);
+            if(ticketNumber >= currentTicket) {
+                nextTicket = currentTicket;
+                return false;
+            }
+        }
 
         let didEmit = emitter.emit(ticketNumber);
         return didEmit;
     };
     this.skipQueue = (ticketNumber) => {
         ticketNumber = typeof ticketNumber === "number" ? ticketNumber : currentTicket;
-        let didEmit = emitter.emit(ticketNumber);
-        if(!didEmit) skipQueue.push(ticketNumber);
+        emitter.emit(ticketNumber);
         skips.push(ticketNumber);
         return this;
     };
