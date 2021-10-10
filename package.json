@@ -1,6 +1,6 @@
 {
   "name": "promise-ticket",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "A small utility to queue promises using a ticket machine.",
   "main": "index.js",
   "scripts": {
