@@ -20,6 +20,7 @@ function TicketMachine() {
         if(resolveValue !== undefined) p = p.then(() => resolveValue);
         return p;
     };
+    this.take = this.queue;
     // We shout "NEXT" for the next ticket in line
     this.next = (ticketNumber) => {
         if(typeof ticketNumber === "number") skips.push(ticketNumber);
