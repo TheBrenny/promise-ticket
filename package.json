@@ -1,0 +1,25 @@
+{
+  "name": "promise-ticket",
+  "version": "1.0.0",
+  "description": "A small utility to queue promises using a ticket machine.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"No tests. Big sad\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheBrenny/promise-ticket.git"
+  },
+  "keywords": [
+    "promise",
+    "ticket",
+    "queue",
+    "concurrency"
+  ],
+  "author": "TheBrenny <iam@justbrenny.me>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TheBrenny/promise-ticket/issues"
+  },
+  "homepage": "https://github.com/TheBrenny/promise-ticket#readme"
+}
