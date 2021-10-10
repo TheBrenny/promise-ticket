@@ -4,7 +4,7 @@
   "description": "A small utility to queue promises using a ticket machine.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"No tests. Big sad\""
+    "test": "node test.js"
   },
   "repository": {
     "type": "git",
